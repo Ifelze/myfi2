@@ -3,7 +3,7 @@
 <!--[if IE 9]> <html lang="en" class="ie9" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
 <head>
-	<title>Login 2 | Unify - Responsive Website Template</title>
+	<title>Register | Myfi - Responsive Website Template</title>
 
 	<!-- Meta -->
 	<meta charset="utf-8"></meta>
@@ -51,10 +51,10 @@
 		<!--=== Breadcrumbs ===-->
 		<div class="breadcrumbs">
 			<div class="container">
-				<h1 class="pull-left">Login to Your Account</h1>
+				<h1 class="pull-left">Register to Your Account</h1>
 				<ul class="pull-right breadcrumb">
 					<li><a href="index.html">Home</a></li>
-					<li class="active">Login</li>
+					<li class="active">Register</li>
 				</ul>
 			</div>
 		</div><!--/breadcrumbs-->
@@ -65,39 +65,49 @@
 				<div class="col-md-6 col-sm-6 hidden-xs image-block equal-height-column"></div>
 	
 				<div class="col-md-6 col-sm-6 form-block equal-height-column">
-					<h2 class="margin-bottom-30">Login To Your Account</h2>
-					<form data-th-action="@{/login}" method="post">
-						<div th:if="${param.error}" class="alert alert-danger fade in">
-							<strong>Sorry!</strong> Invalid User Name And/Or Password.
-						</div>
+					<h2 class="margin-bottom-30">Register To Your Account</h2>
+					<form method="post" th:action="@{/register}" th:object="${registerCommand}">
+						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger fade in">
+							<ul>
+				                <li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
+				                    <span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> :
+				                    <span th:text="${e.message}">The error message</span>
+				                </li>
+				            </ul>
+			            </div>
 						<div class="login-block">
 							<div class="input-group margin-bottom-20">
 								<span class="input-group-addon rounded-left"><i class="icon-user color-blue"></i></span>
-								<input name="j_username" type="text" class="form-control rounded-right" placeholder="Username"></input>
+								<input th:field="*{login}" type="text" class="form-control rounded-right" placeholder="User name"></input>
+							</div>
+							
+							<div class="input-group margin-bottom-20">
+								<span class="input-group-addon rounded-left"><i class="icon-user color-blue"></i></span>
+								<input th:field="*{email}" type="email" class="form-control rounded-right" placeholder="Email"></input>
 							</div>
 	
 							<div class="input-group margin-bottom-20">
 								<span class="input-group-addon rounded-left"><i class="icon-lock color-blue"></i></span>
-								<input name="j_password" type="password" class="form-control rounded-right" placeholder="Password"></input>
+								<input th:field="*{password}" type="password" class="form-control rounded-right" placeholder="Password"></input>
 							</div>
 	
 							<div class="checkbox">
 								<ul class="list-inline">
 									<li>
 										<label>
-											<input type="checkbox"/> Remember me
+											<input type="checkbox"/> I agree to terms &amp; conditions
 										</label>
-									</li>
-	
-									<li class="pull-right">
-										<a href="#">Forgot password?</a>
+										
+										<label>
+											<input type="checkbox"/> Subscribe to our newsletter
+										</label>
 									</li>
 								</ul>
 							</div>
 	
 							<div class="row margin-bottom-70">
 								<div class="col-md-12">
-									<button type="submit" class="btn-u btn-u-blue btn-block rounded">Sign In</button>
+									<button type="submit" class="btn-u btn-u-blue btn-block rounded">Register</button>
 								</div>
 							</div>
 	
@@ -115,7 +125,7 @@
 										</button>
 									</li>
 								</ul>
-								<p>Don't have an account? <a href="register.html">Create New</a></p>
+								<p>have an account already? <a href="login">Login</a></p>
 							</div>
 						</div>
 					</form>

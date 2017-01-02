@@ -3,7 +3,6 @@ package com.ifelze.myfi.web.controller;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +40,10 @@ public class AccountController {
     @Inject
     private UserRepository userRepository;
     
-    @GetMapping("registration")
+    @GetMapping("register")
     public String getRegister(Model model){
 		model.addAttribute("registerCommand", new ManagedUserVM());
-        return "registration";
+        return "register";
     }
     @RequestMapping("login")
     public String getLogin(Model model){
@@ -59,7 +58,7 @@ public class AccountController {
      *
      * @param managedUserVM the managed user View Model
      */
-    @PostMapping("/registration")
+    @PostMapping("/register")
     @Timed
     public String registerUser(@ModelAttribute("registerCommand") @Validated ManagedUserVM managedUserVM, 
     		BindingResult bindingResult) {
@@ -75,7 +74,7 @@ public class AccountController {
     		}
     	}
     	if(bindingResult.hasErrors()){
-    		return "registration";
+    		return "register";
     	}
         User user = userService.createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
         managedUserVM.getFirstName(), managedUserVM.getLastName(), managedUserVM.getEmail().toLowerCase(),
@@ -85,7 +84,7 @@ public class AccountController {
 	       return "redirect:start";
         }
         
-        return "registration";
+        return "register";
     }
     /**
      * GET  /activate : activate the registered user.
