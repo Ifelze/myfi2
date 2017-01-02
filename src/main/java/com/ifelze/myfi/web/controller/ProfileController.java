@@ -37,4 +37,8 @@ public class ProfileController {
     public String getHistory(Model model){
         return "profile_history";
     }
+    @RequestMapping("profile_projects")
+    public String getProjects(Model model){
+        return "profile_projects";
+    }
 }
