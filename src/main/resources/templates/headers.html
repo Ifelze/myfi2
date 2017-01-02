@@ -29,7 +29,6 @@
 	<link rel="stylesheet" href="assets/plugins/animate.css"></link>
 	<link rel="stylesheet" href="assets/plugins/line-icons/line-icons.css"></link>
 	<link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.min.css"></link>
-	<link rel="stylesheet" href="assets/plugins/login-signup-modal-window/css/style.css"></link>
 	<link rel="stylesheet" href="assets/plugins/parallax-slider/css/parallax-slider.css"></link>
 	<link rel="stylesheet" href="assets/plugins/fancybox/source/jquery.fancybox.css"></link>
 	<link rel="stylesheet" href="assets/plugins/owl-carousel/owl-carousel/owl.carousel.css"></link>
@@ -94,6 +93,7 @@
 				                      <input class="btn-u"  type="submit" value="Log out"></input>
 				                    </form>
 								</li>
+								<li sec:authorize="isAuthenticated()" class="cd-log_reg home"><a class="cd-signin" href="/profile_home">My Profile</a></li>
 								<li sec:authorize="isAnonymous()" class="cd-log_reg home"><a class="cd-signin" href="/login">Login</a></li>
 								<li sec:authorize="isAnonymous()" class="cd-log_reg"><a class="cd-signup" href="/register">Register</a></li>
 							</ul>
