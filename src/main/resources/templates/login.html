@@ -66,16 +66,19 @@
 	
 				<div class="col-md-6 col-sm-6 form-block equal-height-column">
 					<h2 class="margin-bottom-30">Login To Your Account</h2>
-					<form action="#">
+					<form data-th-action="@{/login}" method="post">
+						<div th:if="${param.error}" class="alert alert-danger fade in">
+							<strong>Sorry!</strong> Invalid User Name And/Or Password.
+						</div>
 						<div class="login-block">
 							<div class="input-group margin-bottom-20">
 								<span class="input-group-addon rounded-left"><i class="icon-user color-blue"></i></span>
-								<input type="text" class="form-control rounded-right" placeholder="Username"></input>
+								<input name="j_username" type="text" class="form-control rounded-right" placeholder="Username"></input>
 							</div>
 	
 							<div class="input-group margin-bottom-20">
 								<span class="input-group-addon rounded-left"><i class="icon-lock color-blue"></i></span>
-								<input type="password" class="form-control rounded-right" placeholder="Password"></input>
+								<input name="j_password" type="password" class="form-control rounded-right" placeholder="Password"></input>
 							</div>
 	
 							<div class="checkbox">
@@ -112,7 +115,7 @@
 										</button>
 									</li>
 								</ul>
-								<p>Don't have an account? <a href="page_registration2.html">Create New</a></p>
+								<p>Don't have an account? <a href="registration.html">Create New</a></p>
 							</div>
 						</div>
 					</form>

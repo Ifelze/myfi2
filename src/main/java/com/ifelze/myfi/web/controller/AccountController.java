@@ -41,10 +41,10 @@ public class AccountController {
     @Inject
     private UserRepository userRepository;
     
-    @GetMapping("register")
+    @GetMapping("registration")
     public String getRegister(Model model){
 		model.addAttribute("registerCommand", new ManagedUserVM());
-        return "register";
+        return "registration";
     }
     @RequestMapping("login")
     public String getLogin(Model model){
@@ -59,10 +59,10 @@ public class AccountController {
      *
      * @param managedUserVM the managed user View Model
      */
-    @PostMapping("/register")
+    @PostMapping("/registration")
     @Timed
     public String registerUser(@ModelAttribute("registerCommand") @Validated ManagedUserVM managedUserVM, 
-    		BindingResult bindingResult, HttpServletRequest request) {
+    		BindingResult bindingResult) {
     	log.debug("userRepository:" + userRepository);
     	log.debug(managedUserVM.toString());
     	Optional<User> users = userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase());
@@ -71,11 +71,11 @@ public class AccountController {
     	}else{
     		users = userRepository.findOneByEmail(managedUserVM.getEmail());
     		if(users != null && users.isPresent()){
-    			bindingResult.rejectValue("emaloil", "", "e-mail address already in use");
+    			bindingResult.rejectValue("email", "", "e-mail address already in use");
     		}
     	}
     	if(bindingResult.hasErrors()){
-    		return "register";
+    		return "registration";
     	}
         User user = userService.createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
         managedUserVM.getFirstName(), managedUserVM.getLastName(), managedUserVM.getEmail().toLowerCase(),
@@ -85,7 +85,7 @@ public class AccountController {
 	       return "redirect:start";
         }
         
-        return "register";
+        return "registration";
     }
     /**
      * GET  /activate : activate the registered user.

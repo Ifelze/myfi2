@@ -63,44 +63,43 @@
 				<div class="col-md-6 col-sm-6 form-block equal-height-column">
 					<div class="reg-block">
 						<h2 class="margin-bottom-30">Create new account</h2>
-	
-						<div class="input-group margin-bottom-20">
-							<span class="input-group-addon rounded-left"><i class="icon-pencil color-green"></i></span>
-							<input type="text" class="form-control rounded-right" placeholder="Your name"/>
-						</div>
-	
-						<div class="input-group margin-bottom-20">
-							<span class="input-group-addon rounded-left"><i class="icon-user color-green"></i></span>
-							<input type="text" class="form-control rounded-right" placeholder="Username"/>
-						</div>
-	
-						<div class="input-group margin-bottom-20">
-							<span class="input-group-addon rounded-left"><i class="icon-envelope color-green"></i></span>
-							<input type="email" class="form-control rounded-right" placeholder="Your email"/>
-						</div>
-	
-						<div class="input-group margin-bottom-30">
-							<span class="input-group-addon rounded-left"><i class="icon-lock color-green"></i></span>
-							<input type="password" class="form-control rounded-right" placeholder="Password"/>
-						</div>
-	
-						<div class="checkbox margin-bottom-30">
-							<label>
-								<input type="checkbox"/> I agree to terms &amp; conditions
-							</label>
-	
-							<label>
-								<input type="checkbox"/> Subscribe to our newsletter
-							</label>
-						</div>
-	
-						<button type="submit" class="btn-u btn-block rounded">Create new</button>
+						<form method="post" th:action="@{/registration}" th:object="${registerCommand}">
+							<ul th:if="${#fields.hasErrors('*')}">
+							  <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+							</ul>
+		
+							<div class="input-group margin-bottom-20">
+								<span class="input-group-addon rounded-left"><i class="icon-user color-green"></i></span>
+								<input th:field="*{login}" type="text" class="form-control rounded-right" placeholder="Username"/>
+							</div>
+		
+							<div class="input-group margin-bottom-20">
+								<span class="input-group-addon rounded-left"><i class="icon-envelope color-green"></i></span>
+								<input type="email" th:field="*{email}" class="form-control rounded-right" placeholder="Your email"/>
+							</div>
+		
+							<div class="input-group margin-bottom-30">
+								<span class="input-group-addon rounded-left"><i class="icon-lock color-green"></i></span>
+								<input type="password" th:field="*{password}" class="form-control rounded-right" placeholder="Password"/>
+							</div>
+		
+							<div class="checkbox margin-bottom-30">
+								<label>
+									<input type="checkbox"/> I agree to terms &amp; conditions
+								</label>
+		
+								<label>
+									<input type="checkbox"/> Subscribe to our newsletter
+								</label>
+							</div>
+							<button type="submit" class="btn-u btn-block rounded">Create new</button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div><!--/container-->
 		<!--=== End Content Part ===-->
-	
+		<br/>
 		<!--=== Footer v8 ===-->
 		<div class="footer-v8" data-th-replace="footers :: footerv8">
 		</div>

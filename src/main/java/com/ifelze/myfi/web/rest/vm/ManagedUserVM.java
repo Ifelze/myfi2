@@ -95,6 +95,10 @@ public class ManagedUserVM extends UserDTO {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public void setPassword(String password) {
+		this.password = password;
+	}
+    
     public String getPassword() {
         return password;
     }
