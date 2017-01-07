@@ -102,6 +102,11 @@ public class UserService {
         newUser.setLastName(lastName);
         newUser.setEmail(email);
         newUser.setLangKey(langKey);
+        if (langKey == null) {
+        	newUser.setLangKey("en"); // default language
+        } else {
+        	newUser.setLangKey(langKey);
+        }
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
