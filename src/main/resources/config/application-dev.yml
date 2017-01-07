@@ -56,11 +56,16 @@ spring:
                 path:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
+                http: 
+                  enabled: true
     mail:
-        host: localhost
-        port: 25
-        username:
-        password:
+        host: smtp.gmail.com
+        port: 587
+        username: ifelzes@gmail.com
+        password: ifelzes1Team
+        protocol: smtp
+        properties:
+                mail.smtp.starttls.enable: true
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -86,7 +91,7 @@ jhipster:
             key: 6e6ca1cf46007ee6157835b9a82d50710b92f51b
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: myfi2@localhost
-        baseUrl: http://127.0.0.1:8080
+        baseUrl: http://localhost:8281
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite:
@@ -102,7 +107,7 @@ jhipster:
             reportFrequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
+            enabled: true
             host: localhost
             port: 5000
             queueSize: 512
