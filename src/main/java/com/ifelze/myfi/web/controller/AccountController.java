@@ -28,7 +28,7 @@ import com.ifelze.myfi.web.rest.vm.ManagedUserVM;
  */
 @Controller
 public class AccountController {
-
+	
     private final Logger log = LoggerFactory.getLogger(AccountController.class);
     
     @Inject
