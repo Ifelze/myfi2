@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<!--[if IE 8]> <html lang="en" class="ie8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <!--<![endif]-->
 <head>
-	<title>Profile Settings | Unify - Responsive Website Template</title>
+	<title>Profile Settings | Myfi</title>
 
 	<!-- Meta -->
 	<meta charset="utf-8"></meta>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 	<meta name="description" content=""></meta>
 	<meta name="author" content=""></meta>
-
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="favicon.ico"></link>
 
@@ -181,79 +183,46 @@
 									<p>Below are the name and email addresses on file for your account.</p>
 									<br/>
 									<dl class="dl-horizontal">
-										<dt><strong>Your name </strong></dt>
+										<dt><strong>First name </strong></dt>
 										<dd>
-											Edward Rooster
+											<span id="ps_ep_first_name_val" th:text="${currUser.firstName}">First name Not Available</span>
+											<input id="ps_ep_first_name_input" style="display: none" type="text" name="firstName" th:value="${currUser.firstName}"/>
 											<span>
-												<a class="pull-right" href="#">
+												<a id="ps_ep_first_name_edit" class="pull-right" href="#">
 													<i class="fa fa-pencil"></i>
 												</a>
 											</span>
 										</dd>
 										<hr/>
-										<dt><strong>Your ID </strong></dt>
+										<dt><strong>Last name </strong></dt>
 										<dd>
-											FKJ-032440
+											<span id="ps_ep_last_name_val" th:text="${currUser.lastName}">Last Name Not Available</span>
+											<input id="ps_ep_last_name_input" style="display: none" type="text" name="lastName" th:value="${currUser.lastName}"/>
 											<span>
-												<a class="pull-right" href="#">
+												<a id="ps_ep_last_name_edit" class="pull-right" href="#">
 													<i class="fa fa-pencil"></i>
 												</a>
 											</span>
 										</dd>
 										<hr/>
-										<dt><strong>Company name </strong></dt>
+										<dt><strong>ID </strong></dt>
 										<dd>
-											Htmlstream
-											<span>
-												<a class="pull-right" href="#">
-													<i class="fa fa-pencil"></i>
-												</a>
-											</span>
+											<span th:text="${currUser.id}">Id Not Available</span>
 										</dd>
 										<hr/>
 										<dt><strong>Primary Email Address </strong></dt>
 										<dd>
-											edward-rooster@gmail.com
-											<span>
-												<a class="pull-right" href="#">
-													<i class="fa fa-pencil"></i>
-												</a>
-											</span>
+											<span th:text="${currUser.email}"> No Email Available</span>
 										</dd>
 										<hr/>
-										<dt><strong>Phone Number </strong></dt>
+										<dt><strong>Login Id</strong></dt>
 										<dd>
-											(304) 33-2867-499
-											<span>
-												<a class="pull-right" href="#">
-													<i class="fa fa-pencil"></i>
-												</a>
-											</span>
-										</dd>
-										<hr/>
-										<dt><strong>Office Number </strong></dt>
-										<dd>
-											(304) 44-9810-296
-											<span>
-												<a class="pull-right" href="#">
-													<i class="fa fa-pencil"></i>
-												</a>
-											</span>
-										</dd>
-										<hr/>
-										<dt><strong>Address </strong></dt>
-										<dd>
-											California, US
-											<span>
-												<a class="pull-right" href="#">
-													<i class="fa fa-pencil"></i>
-												</a>
-											</span>
+											<span th:text="${currUser.login}"> Login Id Not Available</span>
 										</dd>
 										<hr/>
 									</dl>
-									<button type="button" class="btn-u btn-u-default">Cancel</button>
-									<button type="button" class="btn-u">Save Changes</button>
+									<button type="button" id="ps_ep_cancel" class="btn-u btn-u-default">Cancel</button>
+									<button type="button" id="ps_ep_save" class="btn-u">Save Changes</button>
 								</div>
 
 								<div id="passwordTab" class="profile-edit tab-pane fade">
@@ -411,6 +380,10 @@
 		<div class="footer-v8" data-th-replace="footers :: footerv8">
 		</div>
 		<!--=== End Footer v8 ===-->
+		<!--=== Footer v8 ===-->
+		<div data-th-replace="forms :: ps_forms">
+		</div>
+		<!--=== End Footer v8 ===-->
 	</div><!--/wrapper-->
 	
 	<!--=== Style Switcher ===-->
@@ -427,6 +400,7 @@
 	<script type="text/javascript" src="assets/plugins/back-to-top.js"></script>
 	<script type="text/javascript" src="assets/plugins/smoothScroll.js"></script>
 	<script type="text/javascript" src="assets/plugins/sky-forms-pro/skyforms/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/sky-forms-pro/skyforms/js/jquery.form.min.js"></script>
 	<script type="text/javascript" src="assets/plugins/sky-forms-pro/skyforms/js/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="assets/plugins/sky-forms-pro/skyforms/js/jquery.maskedinput.min.js"></script>
 	<script type="text/javascript" src="assets/plugins/scrollbar/js/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -434,6 +408,7 @@
 	<script type="text/javascript" src="assets/js/custom.js"></script>
 	<!-- JS Page Level -->
 	<script type="text/javascript" src="assets/js/app.js"></script>
+	<script type="text/javascript" src="assets/js/forms/profile_settings.js"></script>
 	<script type="text/javascript" src="assets/js/forms/reg.js"></script>
 	<script type="text/javascript" src="assets/js/forms/checkout.js"></script>
 	<script type="text/javascript" src="assets/js/plugins/datepicker.js"></script>

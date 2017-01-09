@@ -158,6 +158,22 @@ public class UserService {
             log.debug("Changed Information for User: {}", user);
         });
     }
+    
+    public void updateUser(String firstName, String lastName, String langKey) {
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
+            if(!"".equals(firstName)){
+            	user.setFirstName(firstName);
+            }
+            if(!"".equals(lastName)){
+            	user.setLastName(lastName);
+            }
+            if(!"".equals(langKey)){
+            	user.setLangKey(langKey);
+            }
+            userSearchRepository.save(user);
+            log.debug("Changed Information for User: {}", user);
+        });
+    }
 
     public void updateUser(Long id, String login, String firstName, String lastName, String email,
         boolean activated, String langKey, Set<String> authorities) {
