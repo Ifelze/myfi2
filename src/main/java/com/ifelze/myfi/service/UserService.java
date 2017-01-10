@@ -273,4 +273,17 @@ public class UserService {
             userSearchRepository.delete(user);
         }
     }
+    public Optional<User> sendForgotPassword(String email) {
+		log.debug("Activating user for activation key {}", email);
+        return (Optional<User>) userRepository.findOneByEmail(email)
+            .map(user -> {
+                // activate given user for the registration key.
+                user.setActivated(true);
+                user.setActivationKey(null);
+                userRepository.save(user);
+                userSearchRepository.save(user);
+                log.debug("Activated user: {}", user);
+                return user;
+            });
+    }
 }

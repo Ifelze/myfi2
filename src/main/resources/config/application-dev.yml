@@ -24,7 +24,7 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://localhost:3306/myfi2?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:8180/myfi2?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
         username: root
         password: mysql1234
@@ -98,7 +98,7 @@ jhipster:
             enabled: false
             host: localhost
             port: 2003
-            prefix: myfi2
+            prefix: myfi
         prometheus:
             enabled: false
             endpoint: /prometheusMetrics
@@ -109,5 +109,5 @@ jhipster:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: true
             host: localhost
-            port: 5000
+            port: 5005
             queueSize: 512

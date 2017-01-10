@@ -3,6 +3,7 @@ package com.ifelze.myfi.web.controller;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,9 +50,15 @@ public class AccountController {
     public String getLogin(Model model){
         return "login";
     }
-    @RequestMapping("forgot_password")
+    @RequestMapping("forgot_password1")
     public String forgotPassword(Model model){
-        return "forgot_password";
+    	model.addAttribute("forgotCommand", new ManagedUserVM());
+        return "forgot_password1";
+    }
+    @RequestMapping("reset_password")
+    public String getResetPassword(Model model){
+    	model.addAttribute("resetCommand", new ManagedUserVM());  	
+    	return "reset_password";
     }
     /**
      * POST  /register : register the user.
@@ -103,4 +110,71 @@ public class AccountController {
     	}
     	return "activate";
     }
+
+@PostMapping("/forgot_password1")
+@Timed
+public String forgotPassword(@ModelAttribute("forgotCommand") @Validated ManagedUserVM managedUserVM,
+		BindingResult bindingResult, HttpServletRequest request) 
+{
+	
+	String emailid = request.getParameter("email");
+	String existingEmailid;
+  
+	Optional<User> users = userRepository.findOneByEmail(managedUserVM.getEmail());
+
+	if (users != null && users.isPresent()) 
+	{
+		User user = users.get();
+		existingEmailid = user.getEmail();
+		if (emailid.equals(existingEmailid))
+		{
+			String resetKey = user.getResetKey();
+			if(resetKey == null)
+			{
+				Optional<User> user2 = userService.requestPasswordReset(managedUserVM.getEmail());
+				if (user2 != null) 
+				{
+					String baseUrl = request.getScheme() + // "http"
+							"://" + // "://"
+							request.getServerName() + // "myhost"
+							":" + // ":"
+							request.getServerPort() + // "80"
+							request.getContextPath(); // "/myContextPath" or ""
+					// if
+					// deployed in root
+					// context
+					mailService.sendForgotPasswordEmail(user2.get(), baseUrl);
+					return "mailsent_sucess";
+				}
+			}
+		}
+	}
+	bindingResult.rejectValue("email", "", "please enter valid registered email id");
+	return "forgot_password1";
 }
+
+
+@PostMapping("/reset_password")
+@Timed
+public String resetPassword(@ModelAttribute("resetCommand") @Validated ManagedUserVM managedUserVM,
+		BindingResult bindingResult, HttpServletRequest request) {
+		         
+	    String resetKey= request.getParameter("resetKey");
+		Optional<User> user = userRepository.findOneByResetKey(resetKey);
+		if(user!=null) {
+
+			Optional<User> user1 = userService.completePasswordReset(managedUserVM.getPassword(), resetKey);
+			return "resetPassword_success";				
+		
+		}
+		
+			                    
+			return "resetPassword";				
+		
+		
+		
+
+}
+
+}
+

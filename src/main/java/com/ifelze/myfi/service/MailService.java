@@ -113,4 +113,15 @@ public class MailService {
         String subject = messageSource.getMessage("email.social.registration.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
+    @Async
+   	public void sendForgotPasswordEmail(User user, String baseUrl) {
+   		log.debug("Sending activation e-mail to '{}'", user.getEmail());
+           Locale locale = Locale.forLanguageTag(user.getLangKey());
+           Context context = new Context(locale);
+           context.setVariable(USER, user);
+           context.setVariable(BASE_URL, baseUrl);
+           String content = templateEngine.process("passwordResetEmail", context);
+           String subject = messageSource.getMessage("email.reset.title", null, locale);
+           sendEmail(user.getEmail(), subject, content, false, true);
+   	}
 }
