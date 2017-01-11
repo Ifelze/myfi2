@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -56,8 +57,18 @@ public class AccountController {
         return "forgot_password1";
     }
     @RequestMapping("reset_password")
-    public String getResetPassword(Model model){
-    	model.addAttribute("resetCommand", new ManagedUserVM());  	
+    public String getResetPassword(Model model, HttpServletRequest request){
+    	model.addAttribute("resetCommand", new ManagedUserVM());
+    	String key = request.getParameter("key");
+    	
+    	if(!"".equals(key)){
+    		Optional<User> user = userRepository.findOneByResetKey(key);
+    		if(user == null || !user.isPresent()){
+    			//bindingResult.reject("Either key is expired or Invalid try.");
+    			log.error("Either key is expired or Invalid try.");
+    			return "reset_password_error";
+    		}
+    	}
     	return "reset_password";
     }
     /**

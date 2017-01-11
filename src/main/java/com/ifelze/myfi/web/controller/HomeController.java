@@ -21,4 +21,8 @@ public class HomeController {
     public String getTermsConditions(Model model){
         return "terms_conditions";
     }
+    @RequestMapping("401")
+    public String getTermsConditions(){
+        return "401";
+    }
 }
