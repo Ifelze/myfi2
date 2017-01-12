@@ -189,5 +189,45 @@ public class AccountController {
 		    }
 			return "reset_password";				
 	}
+	@PostMapping("/resend_activation_link")
+    @Timed
+    public String resendActivationKey(@ModelAttribute("resendActivationCommond") @Validated ManagedUserVM managedUserVM, 
+    		BindingResult bindingResult, HttpServletRequest request )  
+	{	
+    	String emailid=request.getParameter("email");
+    	log.debug("userRepository:" + userRepository);
+    	log.debug(managedUserVM.toString());
+		Optional<User> users = userRepository.findOneByEmail(managedUserVM.getEmail());
+		if (users != null && users.isPresent())
+    	{
+   		    User user=users.get();   		
+   		    String existingEmailid=user.getEmail();
+			if (emailid.equals(existingEmailid))
+			{
+				String activationKey = user.getActivationKey();
+				if (activationKey == null)
+				{
+			    	bindingResult.rejectValue("email", "", "This user is already activated. Please enter valid email");
+					return "resend_activation_link";
+				} else {
+					if (users != null) {
+						String baseUrl = request.getScheme() + // "http"
+								"://" + // "://"
+								request.getServerName() + // "myhost"
+								":" + // ":"
+								request.getServerPort() + // "80"
+								request.getContextPath(); // "/myContextPath" or
+															// "" if
+															// deployed in root
+															// context
+						mailService.resendActivationEmail(users.get(), baseUrl);
+						return "resend_activation_success";
+					}
+				}
+			}
+    	}
+    	bindingResult.rejectValue("email", "", "please enter registerd e-mailid");
+    	return "resend_activation_link";
+	}
 }
 
