@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,26 +50,19 @@ public class AccountController {
     public String getLogin(Model model){
         return "login";
     }
-    @RequestMapping("forgot_password1")
+    @RequestMapping("resend_activation_success")
+    public String getResendActivationSuccessfulLink(Model model){
+        return "resend_activation_success";
+    }
+    @RequestMapping("forgot_password")
     public String forgotPassword(Model model){
-    	model.addAttribute("forgotCommand", new ManagedUserVM());
-        return "forgot_password1";
+        return "forgot_password";
     }
-    @RequestMapping("reset_password")
-    public String getResetPassword(Model model, HttpServletRequest request){
-    	model.addAttribute("resetCommand", new ManagedUserVM());
-    	String key = request.getParameter("key");
-    	request.getSession().setAttribute("resetPasswordKey", key);
-    	if(!"".equals(key)){
-    		Optional<User> user = userRepository.findOneByResetKey(key);
-    		if(user == null || !user.isPresent()){
-    			//bindingResult.reject("Either key is expired or Invalid try.");
-    			log.error("Either key is expired or Invalid try.");
-    			return "reset_password_error";
-    		}
-    	}
-    	return "reset_password";
-    }
+    @RequestMapping("resend_activation_link")
+	public String resendApplicaionLink(Model model) {
+		model.addAttribute("resendActivationCommond", new ManagedUserVM());
+		return "resend_activation_link";
+	}
     /**
      * POST  /register : register the user.
      *
@@ -121,75 +113,7 @@ public class AccountController {
     	}
     	return "activate";
     }
-
-	@PostMapping("/forgot_password1")
-	@Timed
-	public String forgotPassword(@ModelAttribute("forgotCommand") @Validated ManagedUserVM managedUserVM,
-			BindingResult bindingResult, HttpServletRequest request) 
-	{
-		
-		String emailid = request.getParameter("email");
-		String existingEmailid;
-	  
-		Optional<User> users = userRepository.findOneByEmail(managedUserVM.getEmail());
-	
-		if (users != null && users.isPresent()) 
-		{
-			User user = users.get();
-			existingEmailid = user.getEmail();
-			if (emailid.equals(existingEmailid))
-			{
-				String resetKey = user.getResetKey();
-				if(resetKey == null)
-				{
-					Optional<User> user2 = userService.requestPasswordReset(managedUserVM.getEmail());
-					if (user2 != null) 
-					{
-						String baseUrl = request.getScheme() + // "http"
-								"://" + // "://"
-								request.getServerName() + // "myhost"
-								":" + // ":"
-								request.getServerPort() + // "80"
-								request.getContextPath(); // "/myContextPath" or ""
-						// if
-						// deployed in root
-						// context
-						mailService.sendForgotPasswordEmail(user2.get(), baseUrl);
-						return "mailsent_sucess";
-					}
-				}
-			}
-		}
-		bindingResult.rejectValue("email", "", "please enter valid registered email id");
-		return "forgot_password1";
-	}
-	
-	/**
-	 * This method will reset user password based on resetPasswordKey stored in the session.
-	 * The resetPasswordKey might be sent from user email.
-	 * The resetPasswordKey will be cleared after the password reset success.
-	 * @param managedUserVM This is User DTO. This has password and confirmPassword fields to capture from front end.
-	 * @param bindingResult This is used to add errors.
-	 * @param request This is request from password_reset page.
-	 * @return This method returns either resetPassword_success if success or reset_password if error.
-	 */
-	@PostMapping("/reset_password")
-	@Timed
-	public String resetPassword(@ModelAttribute("resetCommand") @Validated ManagedUserVM managedUserVM,
-			BindingResult bindingResult, HttpServletRequest request) {
-			         
-		    String resetKey= (String)request.getSession().getAttribute("resetPasswordKey");
-		    if(!"".equals(resetKey)){
-				Optional<User> user = userRepository.findOneByResetKey(resetKey);
-				if(user!=null) {
-					userService.completePasswordReset(managedUserVM.getPassword(), resetKey);
-					request.getSession().removeAttribute("resetPasswordKey");
-					return "resetPassword_success";				
-				}
-		    }
-			return "reset_password";				
-	}
-	@PostMapping("/resend_activation_link")
+    @PostMapping("/resend_activation_link")
     @Timed
     public String resendActivationKey(@ModelAttribute("resendActivationCommond") @Validated ManagedUserVM managedUserVM, 
     		BindingResult bindingResult, HttpServletRequest request )  
@@ -230,4 +154,3 @@ public class AccountController {
     	return "resend_activation_link";
 	}
 }
-
