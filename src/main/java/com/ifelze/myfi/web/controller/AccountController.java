@@ -60,7 +60,6 @@ public class AccountController {
     public String getResetPassword(Model model, HttpServletRequest request){
     	model.addAttribute("resetCommand", new ManagedUserVM());
     	String key = request.getParameter("key");
-    	request.getSession().setAttribute("resetPasswordKey", key);
     	if(!"".equals(key)){
     		Optional<User> user = userRepository.findOneByResetKey(key);
     		if(user == null || !user.isPresent()){
@@ -177,13 +176,12 @@ public class AccountController {
 	@Timed
 	public String resetPassword(@ModelAttribute("resetCommand") @Validated ManagedUserVM managedUserVM,
 			BindingResult bindingResult, HttpServletRequest request) {
-			         
-		    String resetKey= (String)request.getSession().getAttribute("resetPasswordKey");
+			        
+		    String resetKey = request.getParameter("resetPasswordKey");
 		    if(!"".equals(resetKey)){
 				Optional<User> user = userRepository.findOneByResetKey(resetKey);
 				if(user!=null) {
 					userService.completePasswordReset(managedUserVM.getPassword(), resetKey);
-					request.getSession().removeAttribute("resetPasswordKey");
 					return "resetPassword_success";				
 				}
 		    }
