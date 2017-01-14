@@ -3,7 +3,7 @@
 <!--[if IE 9]> <html lang="en" class="ie9" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
 <head>
-	<title>Login | ResetPassword</title>
+	<title>ResendActivationLink | Myfi</title>
 
 	<!-- Meta -->
 	<meta charset="utf-8"></meta>
@@ -51,10 +51,10 @@
 		<!--=== Breadcrumbs ===-->
 		<div class="breadcrumbs">
 			<div class="container">
-				<h1 class="pull-left">Reset Your Password</h1>
+				<h1 class="pull-left">Login to Your Account</h1>
 				<ul class="pull-right breadcrumb">
 					<li><a href="/start">Home</a></li>
-					<li class="active">Login</li>
+					<li class="active">ResendActivationLink</li>
 				</ul>
 			</div>
 		</div><!--/breadcrumbs-->
@@ -62,31 +62,31 @@
 		<!--=== Content Part ===-->
 		<div class="container-fluid">
 			<div class="row equal-height-columns">
-				<div class="col-md-6 col-sm-6 hidden-xs image-block equal-height-column"></div>
-	
+				<div class="col-md-6 col-sm-6 hidden-xs image-block equal-height-column"></div>	
 				<div class="col-md-6 col-sm-6 form-block equal-height-column">
-					<h2 class="margin-bottom-30">Reset Your Password</h2>
-					<form data-th-action="@{/reset_password}" method="post" th:object="${resetCommand}">
-						<ul th:if="${#fields.hasErrors('*')}">
-							  <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
-							</ul>
+					<h2 class="margin-bottom-30">Login To Your Account</h2>
+					<form data-th-action="@{/login}" method="post">
+						<div th:if="${param.error}" class="alert alert-danger fade in">
+							<strong>Sorry!</strong> Invalid User Name And/Or Password.
+						</div>
+<!-- 						ResendActivaitonLink      -->
 						<div class="login-block">
-							<div class="input-group margin-bottom-20">
-								<span class="input-group-addon rounded-left"><i class="icon-lock color-blue"></i></span>
-								<input th:field="*{password}" type="password" class="form-control rounded-right" placeholder="Password"></input>
+							<div class="log-reg-v3 content-md">
+								<div class="container">
+									<div class="log-reg-v3 content-md">
+										<div class="container">We have successfully sent Email. Please activate your Account.
+									</div>
+										<!--/end container-->
+									</div>
+								</div>
+<!-- 							End ResendActivaionLink     -->
+								<!--/end container-->
 							</div>
-	
-							<div class="input-group margin-bottom-20">
-								<span class="input-group-addon rounded-left"><i class="icon-lock color-blue"></i></span>
-								<input th:field="*{confirmPassword}" type="password" class="form-control rounded-right" placeholder="Confirm_Password"></input>
-							</div>
-							<input type="hidden" name="resetPasswordKey" th:value="${param.key[0]}"/>
 							<div class="row margin-bottom-70">
 								<div class="col-md-12">
-									<button type="submit" class="btn-u btn-u-blue btn-block rounded">Submit</button>
+									<button type="submit" class="btn-u btn-u-blue btn-block rounded">Sign In</button>
 								</div>
 							</div>
-	
 							<div class="social-login text-center">
 								<div class="or rounded-x">Or</div>
 								<ul class="list-inline margin-bottom-20">
