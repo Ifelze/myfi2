@@ -20,8 +20,6 @@ public class ManagedUserVM extends UserDTO {
 
     private String createdBy;
     
-    private String resetPasswordKey;
-
     private ZonedDateTime createdDate;
 
     private String lastModifiedBy;
@@ -30,9 +28,6 @@ public class ManagedUserVM extends UserDTO {
 
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
-    
-    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
-    private String confirmPassword;
 
     public ManagedUserVM() {
     }
@@ -108,22 +103,6 @@ public class ManagedUserVM extends UserDTO {
         return password;
     }
     
-    public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-	
-	public String getResetPasswordKey() {
-		return resetPasswordKey;
-	}
-
-	public void setResetPasswordKey(String resetPasswordKey) {
-		this.resetPasswordKey = resetPasswordKey;
-	}
-
 	@Override
     public String toString() {
         return "ManagedUserVM{" +

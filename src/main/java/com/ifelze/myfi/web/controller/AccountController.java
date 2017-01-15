@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ifelze.myfi.config.JHipsterProperties;
 import com.ifelze.myfi.domain.User;
 import com.ifelze.myfi.repository.UserRepository;
 import com.ifelze.myfi.service.MailService;
@@ -32,6 +34,9 @@ import com.ifelze.myfi.web.rest.vm.ManagedUserVM;
 public class AccountController {
 	
     private final Logger log = LoggerFactory.getLogger(AccountController.class);
+    
+    @Inject
+    private JHipsterProperties jHipsterProperties;
     
     @Inject
     private MailService mailService;
@@ -53,21 +58,24 @@ public class AccountController {
     }
     @RequestMapping("forgot_password1")
     public String forgotPassword(Model model){
-    	model.addAttribute("forgotCommand", new ManagedUserVM());
+    	model.addAttribute("forgotPasswordCmd", new ManagedUserVM());
         return "forgot_password1";
     }
     @RequestMapping("reset_password")
     public String getResetPassword(Model model, HttpServletRequest request){
-    	model.addAttribute("resetCommand", new ManagedUserVM());
     	String key = request.getParameter("key");
+    	if(key == null){
+    		key = (String)request.getSession().getAttribute("resetPasswordKey");
+    	}
     	if(!"".equals(key)){
+    		request.getSession().setAttribute("resetPasswordKey", key);
     		Optional<User> user = userRepository.findOneByResetKey(key);
     		if(user == null || !user.isPresent()){
-    			//bindingResult.reject("Either key is expired or Invalid try.");
     			log.error("Either key is expired or Invalid try.");
     			return "reset_password_error";
     		}
     	}
+    	model.addAttribute("resetCommand", new ManagedUserVM());
     	return "reset_password";
     }
     /**
@@ -123,41 +131,25 @@ public class AccountController {
 
 	@PostMapping("/forgot_password1")
 	@Timed
-	public String forgotPassword(@ModelAttribute("forgotCommand") @Validated ManagedUserVM managedUserVM,
+	public String forgotPassword(@ModelAttribute("forgotPasswordCmd") @Validated ManagedUserVM managedUserVM,
 			BindingResult bindingResult, HttpServletRequest request) 
 	{
 		
-		String emailid = request.getParameter("email");
-		String existingEmailid;
-	  
 		Optional<User> users = userRepository.findOneByEmail(managedUserVM.getEmail());
 	
 		if (users != null && users.isPresent()) 
 		{
 			User user = users.get();
-			existingEmailid = user.getEmail();
-			if (emailid.equals(existingEmailid))
+			String resetKey = user.getResetKey();
+			if(resetKey == null)
 			{
-				String resetKey = user.getResetKey();
-				if(resetKey == null)
-				{
-					Optional<User> user2 = userService.requestPasswordReset(managedUserVM.getEmail());
-					if (user2 != null) 
-					{
-						String baseUrl = request.getScheme() + // "http"
-								"://" + // "://"
-								request.getServerName() + // "myhost"
-								":" + // ":"
-								request.getServerPort() + // "80"
-								request.getContextPath(); // "/myContextPath" or ""
-						// if
-						// deployed in root
-						// context
-						mailService.sendForgotPasswordEmail(user2.get(), baseUrl);
-						return "mailsent_sucess";
-					}
+				Optional<User> updatedUser = userService.requestPasswordReset(managedUserVM.getEmail());
+				if(updatedUser != null && updatedUser.isPresent()){
+					user = updatedUser.get();
 				}
 			}
+			mailService.sendForgotPasswordEmail(user, jHipsterProperties.getMail().getBaseUrl());
+			return "forgot_password_mail";
 		}
 		bindingResult.rejectValue("email", "", "please enter valid registered email id");
 		return "forgot_password1";
@@ -167,7 +159,6 @@ public class AccountController {
 	 * This method will reset user password based on resetPasswordKey stored in the session.
 	 * The resetPasswordKey might be sent from user email.
 	 * The resetPasswordKey will be cleared after the password reset success.
-	 * @param managedUserVM This is User DTO. This has password and confirmPassword fields to capture from front end.
 	 * @param bindingResult This is used to add errors.
 	 * @param request This is request from password_reset page.
 	 * @return This method returns either resetPassword_success if success or reset_password if error.
@@ -177,12 +168,26 @@ public class AccountController {
 	public String resetPassword(@ModelAttribute("resetCommand") @Validated ManagedUserVM managedUserVM,
 			BindingResult bindingResult, HttpServletRequest request) {
 			        
-		    String resetKey = request.getParameter("resetPasswordKey");
+		    String resetKey = (String)request.getSession().getAttribute("resetPasswordKey");
 		    if(!"".equals(resetKey)){
 				Optional<User> user = userRepository.findOneByResetKey(resetKey);
-				if(user!=null) {
-					userService.completePasswordReset(managedUserVM.getPassword(), resetKey);
-					return "resetPassword_success";				
+				if(user != null) {
+					String password = request.getParameter("password");
+					String confirmPassword = request.getParameter("confirmPassword");
+					if(password == null || "".equals(password.trim())){
+						bindingResult.reject("password", "Please enter password");
+					}
+					if(confirmPassword == null || "".equals(confirmPassword.trim())){
+						bindingResult.reject("confirmPassword", "Please enter Confirm password");
+					}
+					if(!bindingResult.hasErrors() && !confirmPassword.equals(password)){
+						bindingResult.reject("password", "Password and confirm password does not match");
+					}
+					if(!bindingResult.hasErrors()){
+						userService.completePasswordReset(password, resetKey);
+						request.getSession().removeAttribute("resetPasswordKey");
+						return "resetPassword_success";
+					}
 				}
 		    }
 			return "reset_password";				
