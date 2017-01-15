@@ -3,7 +3,7 @@
 <!--[if IE 9]> <html lang="en" class="ie9" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
 <head>
-	<title>Login | ForgotPassword</title>
+	<title>Registration Success | Myfi</title>
 
 	<!-- Meta -->
 	<meta charset="utf-8"></meta>
@@ -51,63 +51,21 @@
 		<!--=== Breadcrumbs ===-->
 		<div class="breadcrumbs">
 			<div class="container">
-				<h1 class="pull-left">Forgot Password</h1>
+				<h1 class="pull-left">Registration</h1>
 				<ul class="pull-right breadcrumb">
 					<li><a href="/start">Home</a></li>
-					<li class="active">Login</li>
+					<li class="active">Registration Success</li>
 				</ul>
 			</div>
 		</div><!--/breadcrumbs-->
 		<!--=== End Breadcrumbs ===-->
 		<!--=== Content Part ===-->
-		<div class="container-fluid">
+		<div class="container content">
 			<div class="row equal-height-columns">
-		
-				<div class="col-md-6 col-sm-6 hidden-xs image-block equal-height-column"></div>
-	
-				<div class="col-md-6 col-sm-6 form-block equal-height-column">
-					<h2 class="margin-bottom-30">ENTER YOUR EMAIL ADDRESS</h2>
-					<form data-th-action="@{/forgot_password1}" data-th-object="${forgotPasswordCmd}" method="post">
-						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger fade in">
-							<ul>
-				                <li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
-				                    <span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> :
-				                    <span th:text="${e.message}">The error message</span>
-				                </li>
-				            </ul>
-			            </div>
-						<div class="login-block">
-							<div class="input-group margin-bottom-20">
-								<span class="input-group-addon rounded-left"><i class="icon-user color-blue"></i></span>
-								<input th:field="*{email}" type="text" class="form-control rounded-right" placeholder="Email Address"></input>
-							</div>
-							
-							<div class="row margin-bottom-70">
-								<div class="col-md-12">
-									<button type="submit" class="btn-u btn-u-blue btn-block rounded">Submit</button>
-								</div>
-							</div>
-	
-							<div class="social-login text-center">
-								<div class="or rounded-x">Or</div>
-								<ul class="list-inline margin-bottom-20">
-									<li>
-										<button class="btn rounded btn-lg btn-facebook">
-											<i class="fa fa-facebook"></i> Facebook Sign in
-										</button>
-									</li>
-									<li>
-										<button class="btn rounded btn-lg btn-twitter">
-											<i class="fa fa-twitter"></i> Twitter Sign in
-										</button>
-									</li>
-								</ul>
-								<p>Don't have an account? <a href="register.html">Create New</a></p>
-							</div>
-						</div>
-					</form>
+				<div>
+					<h3> You have successfully registered your Account. We have sent an Email.</h3>
+					<h4> Please activate your Account.</h4>
 				</div>
-				
 			</div>
 		</div><!--/container-->
 		<!--=== End Content Part ===-->

@@ -56,10 +56,14 @@ public class AccountController {
     public String getLogin(Model model){
         return "login";
     }
-    @RequestMapping("forgot_password1")
+    @RequestMapping("register_success")
+    public String registerSuccess(){
+        return "register_success";
+    }
+    @RequestMapping("forgot_password")
     public String forgotPassword(Model model){
     	model.addAttribute("forgotPasswordCmd", new ManagedUserVM());
-        return "forgot_password1";
+        return "forgot_password";
     }
     @RequestMapping("reset_password")
     public String getResetPassword(Model model, HttpServletRequest request){
@@ -106,7 +110,7 @@ public class AccountController {
         managedUserVM.getLangKey());
         if(user != null){
 	           mailService.sendActivationEmail(user);
-	       return "redirect:start";
+	       return "redirect:register_success";
         }
         
         return "register";
@@ -129,7 +133,7 @@ public class AccountController {
     	return "activate";
     }
 
-	@PostMapping("/forgot_password1")
+	@PostMapping("/forgot_password")
 	@Timed
 	public String forgotPassword(@ModelAttribute("forgotPasswordCmd") @Validated ManagedUserVM managedUserVM,
 			BindingResult bindingResult, HttpServletRequest request) 
@@ -149,12 +153,51 @@ public class AccountController {
 				}
 			}
 			mailService.sendForgotPasswordEmail(user, jHipsterProperties.getMail().getBaseUrl());
-			return "forgot_password_mail";
+			return "forgot_password_success";
 		}
 		bindingResult.rejectValue("email", "", "please enter valid registered email id");
-		return "forgot_password1";
+		return "forgot_password";
 	}
-	
+	@RequestMapping("resend_activation_success")
+    public String getResendActivationSuccessfulLink(Model model){
+        return "resend_activation_success";
+    }
+	@RequestMapping("resend_activation_link")
+	public String resendApplicaionLink(Model model) {
+		model.addAttribute("resendActivationCommond", new ManagedUserVM());
+		return "resend_activation_link";
+	}
+	@PostMapping("/resend_activation_link")
+    @Timed
+    public String resendActivationKey(@ModelAttribute("resendActivationCommond") @Validated ManagedUserVM managedUserVM, 
+    		BindingResult bindingResult, HttpServletRequest request )  
+	{	
+    	String emailid=request.getParameter("email");
+    	log.debug("userRepository:" + userRepository);
+    	log.debug(managedUserVM.toString());
+		Optional<User> users = userRepository.findOneByEmail(managedUserVM.getEmail());
+		if (users != null && users.isPresent())
+    	{
+   		    User user=users.get();   		
+   		    String existingEmailid=user.getEmail();
+			if (emailid.equals(existingEmailid))
+			{
+				String activationKey = user.getActivationKey();
+				if (activationKey == null)
+				{
+			    	bindingResult.rejectValue("email", "", "This user is already activated. Please enter valid email");
+					return "resend_activation_link";
+				} else {
+					if (users != null) {
+						mailService.resendActivationEmail(users.get(), jHipsterProperties.getMail().getBaseUrl());
+						return "resend_activation_success";
+					}
+				}
+			}
+    	}
+    	bindingResult.rejectValue("email", "", "please enter registerd e-mailid");
+    	return "resend_activation_link";
+	}
 	/**
 	 * This method will reset user password based on resetPasswordKey stored in the session.
 	 * The resetPasswordKey might be sent from user email.
