@@ -37,21 +37,26 @@ jQuery(document).ready(function() {
 		var token = $("meta[name='_csrf']").attr("content");
 	    var header = $("meta[name='_csrf_header']").attr("content");
 	    if(dataFound === true){
+	    	var jsonData = {"firstName": firstName, "lastName": lastName};
 			$.ajax({
 		      success:    function() { 
-		    	  alert("Sucesss");
+				  $('#ps_ep_last_name_val').text($('#ps_ep_last_name_input').val());
+				  $('#ps_ep_first_name_val').text($('#ps_ep_first_name_input').val());
+				  $('#ps_ep_last_name_input').hide();
+				  $('#ps_ep_last_name_val').show();
+				  $('#ps_ep_first_name_input').hide();
+				  $('#ps_ep_first_name_val').show();
 		      },
 		      beforeSend: function(xhr){
-		    	  xhr.setRequestHeader("Content-Type","application/json");
-	              xhr.setRequestHeader("Accept","application/json");
 	              xhr.setRequestHeader(header, token);
 		      },
+		      contentType: 'application/json; charset=utf-8',
 		      type: "POST",
 		      url: "/edit_profile",
 		      dataType: "json",
-		      data: {"firstName": firstName, "lastName": lastName},
+		      data: JSON.stringify(jsonData),
 		      error: function(){
-		    	  alert("hi");
+		    	  alert("Error.Please try again.");
 		      }
 		    });
 	    }
