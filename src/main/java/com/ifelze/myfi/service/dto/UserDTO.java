@@ -94,8 +94,16 @@ public class UserDTO {
     public Set<String> getAuthorities() {
         return authorities;
     }
+    
+    public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    @Override
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	@Override
     public String toString() {
         return "UserDTO{" +
             "login='" + login + '\'' +
