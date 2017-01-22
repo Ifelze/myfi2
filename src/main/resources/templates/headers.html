@@ -88,12 +88,13 @@
 						<div class="col-sm-4 col-xs-4 clearfix">
 							<i class="fa fa-search search-btn pull-right"></i>
 							<ul class="topbar-list topbar-log_reg pull-right visible-sm-block visible-md-block visible-lg-block">
+								<li sec:authorize="isAuthenticated()" class="cd-log_reg home"><span sec:authentication="name"></span> <span sec:authentication="principal.authorities"></span></li>
+								<li sec:authorize="isAuthenticated()" class="cd-log_reg home"><a class="cd-signin" href="/profile_home">My Profile</a></li>
 								<li sec:authorize="isAuthenticated()" class="home">
 									<form data-th-action="@{/logout}" id="cd-logout" method="post">
-				                      <input class="btn-u"  type="submit" value="Log out"></input>
-				                    </form>
+				                      <a href="#">Logout</a>
+				                     </form>
 								</li>
-								<li sec:authorize="isAuthenticated()" class="cd-log_reg home"><a class="cd-signin" href="/profile_home">My Profile</a></li>
 								<li sec:authorize="isAnonymous()" class="cd-log_reg home"><a class="cd-signin" href="/login">Login</a></li>
 								<li sec:authorize="isAnonymous()" class="cd-log_reg"><a class="cd-signup" href="/register">Register</a></li>
 							</ul>
