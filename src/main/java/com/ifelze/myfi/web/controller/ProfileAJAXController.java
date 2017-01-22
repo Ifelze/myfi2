@@ -3,6 +3,8 @@
  */
 package com.ifelze.myfi.web.controller;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -36,6 +38,14 @@ public class ProfileAJAXController {
     public ResponseEntity<?> editProfile(@RequestBody ManagedUserVM user){
     	log.info("edit_profile:" + user.toString());
     	userService.updateUser(user.getFirstName(), user.getLastName(), null);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping(path="edit_profile_cp", 
+    		produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE},
+    		consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @Timed
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> input){
+    	log.info("edit_profile_cp:" + input);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
