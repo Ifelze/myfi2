@@ -56,7 +56,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-8 col-xs-8">
-							<div class="topbar-time">Friday, Mar 13th 2015</div>
+							<div class="topbar-time" th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}">Friday, Mar 13th 2015</div>
 							<div class="topbar-toggler"><span class="fa fa-angle-down"></span></div>
 							<ul class="topbar-list topbar-menu">
 								<li><a href="#">Blog</a></li>
