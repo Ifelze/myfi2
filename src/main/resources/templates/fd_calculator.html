@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head>
+	<title>Fixed Deposit Calculator | Myfi</title>
+
+	<!-- Meta -->
+	<meta charset="utf-8"></meta>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+	<meta name="description" content=""></meta>
+	<meta name="author" content=""></meta>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="favicon.ico"></link>
+
+	<!-- Web Fonts -->
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700&amp;subset=cyrillic,latin"></link>
+
+	<!-- CSS Global Compulsory -->
+	<link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="assets/css/style.css"></link>
+	
+	<!-- CSS Header and Footer -->
+	<link rel="stylesheet" href="assets/css/headers/header-v8.css"></link>
+	<link rel="stylesheet" href="assets/css/footers/footer-v8.css"></link>
+
+	<!-- CSS Implementing Plugins -->
+	<link rel="stylesheet" href="assets/plugins/animate.css"></link>
+	<link rel="stylesheet" href="assets/plugins/line-icons/line-icons.css"></link>
+	<link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.min.css"></link>
+	<link rel="stylesheet" href="assets/plugins/brand-buttons/brand-buttons.css"></link>
+
+	<!-- CSS Theme -->
+	<link rel="stylesheet" href="assets/css/theme-colors/default.css" id="style_color"></link>
+	<link rel="stylesheet" href="assets/css/theme-skins/dark.css"></link>
+
+	<!-- CSS Customization -->
+	<link rel="stylesheet" href="assets/css/custom.css"></link>
+</head>
+
+<body class="header-fixed header-fixed-space-v2">
+	<div class="wrapper">
+		<!--=== Header v8 ===-->
+		<div class="header-v8 header-sticky" data-th-replace="headers :: headerv8">
+		</div>
+		<!--=== End Header v8 ===-->
+		<!--=== Breadcrumbs ===-->
+		<div class="breadcrumbs">
+			<div class="container">
+				<h1 class="pull-left">Fixed Deposit Calculator</h1>
+				<ul class="pull-right breadcrumb">
+					<li><a href="/start">Home</a></li>
+					<li class="active">Fixed Deposit Calculator</li>
+				</ul>
+			</div>
+		</div><!--/breadcrumbs-->
+		<!--=== End Breadcrumbs ===-->
+		<!--=== Content Part ===-->
+		<div class="container content">
+			<div class="row">
+				<h2>Fixed Deposit Calculator</h2>
+  			</div>
+		</div><!--/end container-->
+
+		<!--=== Footer v8 ===-->
+		<div class="footer-v8" data-th-replace="footers :: footerv8">
+		</div>
+		<!--=== End Footer v8 ===-->
+	</div><!--/wrapper-->
+	
+	<!--=== Style Switcher ===-->
+	<i class="style-switcher-btn fa fa-cogs hidden-xs"></i>
+	<div class="style-switcher animated fadeInRight" data-th-replace="style_switcher :: style_switcher">
+	</div><!--/style-switcher-->
+	<!--=== End Style Switcher ===-->
+	
+	<!-- JS Global Compulsory -->
+	<script src="assets/plugins/jquery/jquery.min.js"></script>
+	<script src="assets/plugins/jquery/jquery-migrate.min.js"></script>
+	<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- JS Implementing Plugins -->
+	<script src="assets/plugins/back-to-top.js"></script>
+	<script src="assets/plugins/backstretch/jquery.backstretch.min.js"></script>
+
+	<!-- JS Customization -->
+	<script src="assets/js/custom.js"></script>
+
+	<!-- JS Page Level -->
+	<script src="assets/js/app.js"></script>
+	<script type="text/javascript" src="assets/js/plugins/style-switcher.js"></script>
+	<script>
+		jQuery(document).ready(function() {
+			App.init();
+			StyleSwitcher.initStyleSwitcher();
+		});
+	</script>
+	<script>
+		$(".image-block").backstretch([
+			"assets/img/bg/img11.jpg",
+			"assets/img/bg/img5.jpg",
+			], {
+				fade: 1000,
+				duration: 7000
+			});
+	</script>
+	<!--[if lt IE 9]>
+	<script src="assets/plugins/respond.js"></script>
+	<script src="assets/plugins/html5shiv.js"></script>
+	<script src="assets/plugins/placeholder-IE-fixes.js"></script>
+	<![endif]-->
+</body>
+</html>
